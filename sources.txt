@@ -1,0 +1,13 @@
+src\CollaborativeFiltering.java
+src\CustomMAE.java
+src\CustomRatingAlgorithm.java
+src\DataCreation.java
+src\IncrementalFiltering.java
+src\ItemBasedFiltering.java
+src\OutputFormat.java
+src\PearsonCorrelation.java
+src\PearsonWeightedRating.java
+src\RatingAlgorithm.java
+src\RecommendationSystemMain.java
+src\Util.java
+src\WeightedRating.java
