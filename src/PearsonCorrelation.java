@@ -86,7 +86,6 @@ public class PearsonCorrelation extends RatingAlgorithm {
             double weightedAvgRating = queryUserActualAvgRating + (weightedRatingSum / totalWeight);
             return weightedAvgRating;
         } else {
-            System.out.println("inside else");
             // Not enough similar users found. Take average of <user's average rating> and <average rating of that movie> in the corpus
             double avgUserRatingForQueryMovie = avgUserRatingsForMovies.get(queryMovieId - 1);
             if(avgUserRatingForQueryMovie == 0) return queryUserActualAvgRating;

@@ -25,28 +25,18 @@ public abstract class RatingAlgorithm {
                 return new PearsonCorrelation(trainingData, avgUserRatingsForMovies, false, true);
             case ITEM_BASED_CF:
                 return new ItemBasedFiltering(trainingData, avgUserRatingsForMovies);
-            case EUCLIDEAN_DISTANCE_WITH_LOG_BASE:
-                return new CustomRatingAlgorithm(trainingData, avgUserRatingsForMovies, CustomRatingAlgorithm.EUCLIDEAN_SIMILARITY, CustomRatingAlgorithm.SIMPLE_LOG_SIMILARITY, 0.0);
-            case EUCLIDEAN_DISTANCE_WITH_JACCARD:
-                return new CustomRatingAlgorithm(trainingData, avgUserRatingsForMovies, CustomRatingAlgorithm.EUCLIDEAN_SIMILARITY, CustomRatingAlgorithm.JACCARD_SIMILARITY, 0.0);
-            case COSINE_SIM_WITH_LOG_BASE:
-                return new CustomRatingAlgorithm(trainingData, avgUserRatingsForMovies, CustomRatingAlgorithm.COSINE_SIMILARITY, CustomRatingAlgorithm.SIMPLE_LOG_SIMILARITY, 0.0);
-            case COSINE_SIM_WITH_JACCARD:
-                return new CustomRatingAlgorithm(trainingData, avgUserRatingsForMovies, CustomRatingAlgorithm.COSINE_SIMILARITY, CustomRatingAlgorithm.JACCARD_SIMILARITY, 0.0);
-            case EUCLIDEAN_DISTANCE:
-                return new CustomRatingAlgorithm(trainingData, avgUserRatingsForMovies, CustomRatingAlgorithm.EUCLIDEAN_SIMILARITY, "", 0.0);
-            case NORMALIZED_EUCLIDEAN_DISTANCE:
-                return new CustomRatingAlgorithm(trainingData, avgUserRatingsForMovies, CustomRatingAlgorithm.NORMALIZED_EUCLIDEAN_DISTANCE, "", 0.3);
-            case WEIGHTED_SLOPE_ONE:
-                return new WeightedSlopeOneAlgorithm(trainingData, avgUserRatingsForMovies);
-            case BASIC_AVERAGE_ALGORITHM:
-                return new BasicAverageAlgorithm(trainingData, avgUserRatingsForMovies);
-            case BASIC_AVERAGE_ALGORITHM2:
-                return new BasicAverageAlgorithm2(trainingData, avgUserRatingsForMovies);
+            case USER_AND_ITEMS_AVERAGE:
+                return new UserAndItemAverage(trainingData, avgUserRatingsForMovies);
             case COSINE_SIMILARITY_AND_ITEM_BASED:
                 return new CosineSimilarityAndItemBased(trainingData, avgUserRatingsForMovies);
-            case COSINE_AND_JACCARD:
-                return new CosineSimilarityAndJaccard(trainingData, avgUserRatingsForMovies);
+            case NORMALIZED_EUCLIDEAN_DISTANCE:
+                return new GenericRatingAlgorithm(trainingData, avgUserRatingsForMovies, GenericRatingAlgorithm.NORMALIZED_EUCLIDEAN_DISTANCE, "", 0.3);
+            case EUCLIDEAN_DISTANCE_WITH_LOG_BASE:
+                return new GenericRatingAlgorithm(trainingData, avgUserRatingsForMovies, GenericRatingAlgorithm.EUCLIDEAN_SIMILARITY, GenericRatingAlgorithm.SIMPLE_LOG_SIMILARITY, 0.0);
+            case EUCLIDEAN_DISTANCE_WITH_JACCARD:
+                return new GenericRatingAlgorithm(trainingData, avgUserRatingsForMovies, GenericRatingAlgorithm.EUCLIDEAN_SIMILARITY, GenericRatingAlgorithm.JACCARD_SIMILARITY, 0.0);
+            case WEIGHTED_SLOPE_ONE:
+                return new WeightedSlopeOneAlgorithm(trainingData, avgUserRatingsForMovies);
         }
         throw new IllegalArgumentException("Algorithm not found");
     }
