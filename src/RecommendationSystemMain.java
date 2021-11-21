@@ -18,6 +18,8 @@ public class RecommendationSystemMain {
     private static final Map<String, String> TEST_INPUT_OUTPUT_FILE_MAP = Map.of("test5.txt", "result5.txt",
             "test10" +
                     ".txt", "result10.txt", "test20.txt", "result20.txt");
+    //private static final String TRAINING_DATA_FILE_PATH = "training-data/train-test3.txt";
+    //private static final Map<String, String> TEST_INPUT_OUTPUT_FILE_MAP = Map.of("test3.txt", "output3.txt");
 
     public static void main(String[] args) throws IOException {
         for (AlgorithmEnum algo : AlgorithmEnum.values()) {
@@ -80,10 +82,12 @@ public class RecommendationSystemMain {
                                                                   RatingAlgorithm ratingAlgorithm) {
 
         if (queryUserId == -1) return Collections.emptyList();
+        //System.out.println("handling user: " + userId + " and query list: " + movieQueryList);
         List<OutputFormat> resultList = new ArrayList<>();
         for (int queryMovieId : movieQueryList) {
             short rating = (short) Math.round(ratingAlgorithm.estimateUserRatingForAMovie(userRatingMap, queryMovieId));
             if (rating < 1) {
+                System.out.println("rating less than 1: " + rating);
                 rating = 1;
             }
             if (rating > 5) rating = 5;

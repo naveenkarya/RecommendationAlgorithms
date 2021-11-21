@@ -8,13 +8,11 @@ public class MAECalculator {
         //printMAE("result/custom-predicted-result.txt", "test-data/custom-result.txt");
     }
     public static void printMAE(String predictedResultFileName, String actualResultFileName) {
-        Scanner predictedResultScanner = null;
-        Scanner actualResultScanner = null;
         try {
             File predictedResultFile = new File(predictedResultFileName);
             File actualResultFile = new File(actualResultFileName);
-            predictedResultScanner = new Scanner(predictedResultFile);
-            actualResultScanner = new Scanner(actualResultFile);
+            Scanner predictedResultScanner = new Scanner(predictedResultFile);
+            Scanner actualResultScanner = new Scanner(actualResultFile);
             int count = 0;
             double sum = 0.0;
             while (predictedResultScanner.hasNextLine() && actualResultScanner.hasNextLine()) {
@@ -27,11 +25,13 @@ public class MAECalculator {
                 int predictedUserId = Integer.parseInt(predictedLineSplit[0]);
                 int actualUserId = Integer.parseInt(actualLineSplit[0]);
                 if (predictedUserId != actualUserId) {
+                    System.out.println("userId doesnt match");
                     continue;
                 }
                 int predictedMovieId = Integer.parseInt(predictedLineSplit[1]);
                 int actualMovieId = Integer.parseInt(actualLineSplit[1]);
                 if (predictedMovieId != actualMovieId) {
+                    System.out.println("movieId doesnt match");
                     continue;
                 }
                 double predictedRating = Double.parseDouble(predictedLineSplit[2]);
@@ -42,10 +42,7 @@ public class MAECalculator {
             //sum = Math.sqrt(sum);
             System.out.println("MAE: " + sum);
         } catch (Exception e) {
-        }
-        finally {
-            if(predictedResultScanner != null) predictedResultScanner.close();
-            if(actualResultScanner != null) actualResultScanner.close();
+            System.out.println(e.getMessage());
         }
     }
 }

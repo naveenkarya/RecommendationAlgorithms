@@ -17,6 +17,7 @@ public class DataCreation {
     //TODO: Remove it and other related files.
     public static void main(String[] args) throws IOException {
         Map<Integer, Integer> movieIdMap = getMovieIdMap();
+        System.out.println();
         //createTrainingData(movieIdMap);
         //createTestData(movieIdMap);
     }
@@ -38,7 +39,7 @@ public class DataCreation {
     }
 
     private static void createTestData(Map<Integer, Integer> movieIdMap) throws IOException {
-        File file = new File("training-data/custom-ratings-unformatted.txt");
+        File file = new File("training-data/train-test5-unformatted.txt");
         FileWriter fileWriterTestData = new FileWriter("test-data/custom-test.txt");
         FileWriter fileWriterResult = new FileWriter("test-data/custom-result.txt");
         Scanner scanner = new Scanner(file);
@@ -76,7 +77,7 @@ public class DataCreation {
     }
 
     private static void createTrainingData(Map<Integer, Integer> movieIdMap) throws IOException {
-        File file = new File("training-data/custom-ratings-unformatted.txt");
+        File file = new File("training-data/train-test5-unformatted.txt");
         FileWriter fileWriter = new FileWriter("training-data/custom-train-test.txt");
         Scanner scanner = new Scanner(file);
         List<String> t = new ArrayList<>();

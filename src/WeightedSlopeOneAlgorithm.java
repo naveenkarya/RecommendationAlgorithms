@@ -3,9 +3,11 @@ import java.util.*;
 public class WeightedSlopeOneAlgorithm extends RatingAlgorithm {
     private double diffMatrix[][];
     private int countMatrix[][];
+    private UserBasedCosineSimilarity otherRatingAlgorithm;
 
     public WeightedSlopeOneAlgorithm(List<List<Double>> trainingData, List<Double> avgUserRatingsForMovies) {
         super(trainingData, avgUserRatingsForMovies);
+        this.otherRatingAlgorithm = new UserBasedCosineSimilarity(trainingData, avgUserRatingsForMovies);
         int totalNumberOfMovies = trainingData.get(0).size();
         this.diffMatrix = new double[totalNumberOfMovies][totalNumberOfMovies];
         this.countMatrix = new int[totalNumberOfMovies][totalNumberOfMovies];
@@ -52,6 +54,7 @@ public class WeightedSlopeOneAlgorithm extends RatingAlgorithm {
             return (short) rating;
         }
         else {
+            System.out.println("inside else");
             double avgUserRatingForQueryMovie = avgUserRatingsForMovies.get(queryMovieId - 1);
             if(avgUserRatingForQueryMovie == 0) return queryUserActualAvgRating;
             else return (queryUserActualAvgRating + avgUserRatingForQueryMovie) / 2;
