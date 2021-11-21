@@ -27,6 +27,7 @@ public class RecommendationSystemMain {
         String algoCode = myObj.nextLine().trim();
         AlgorithmEnum algorithmEnum = AlgorithmEnum.fromCode(algoCode);
         System.out.println("Executing with algorithm: " + algorithmEnum.getAlgoName());
+        System.out.println("...");
         Util.deleteDir(new File(OUTPUT_DIR));
         Files.createDirectories(Paths.get(OUTPUT_DIR));
         List<List<Double>> trainingData = Util.parseTrainingDataFile(TRAINING_DATA_FILE_PATH);
@@ -71,7 +72,7 @@ public class RecommendationSystemMain {
                 outputFileWriter.close();
             }
         }
-        System.out.println("Result files generated in result folder");
+        System.out.println("Execution completed. Result files are generated in the result folder.");
         MAECalculator.printMAE("result/custom-predicted-result.txt", "test-data/custom-result.txt");
     }
 
@@ -84,6 +85,7 @@ public class RecommendationSystemMain {
         List<OutputFormat> resultList = new ArrayList<>();
         for (int queryMovieId : movieQueryList) {
             short rating = (short) Math.round(ratingAlgorithm.estimateUserRatingForAMovie(userRatingMap, queryMovieId));
+            // Handle overflows and underflows
             if (rating < 1) {
                 rating = 1;
             }
