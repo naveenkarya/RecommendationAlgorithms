@@ -71,6 +71,7 @@ public class RecommendationSystemMain {
                 outputFileWriter.close();
             }
         }
+        System.out.println("Result files generated in result folder");
         MAECalculator.printMAE("result/custom-predicted-result.txt", "test-data/custom-result.txt");
     }
 

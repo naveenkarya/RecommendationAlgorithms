@@ -49,7 +49,7 @@ public class ItemBasedFiltering extends RatingAlgorithm {
             // Not enough similar users found. Take user's average rating
             double avgUserRatingForQueryMovie = avgUserRatingsForMovies.get(queryMovieId - 1);
             if (avgUserRatingForQueryMovie == 0) return queryUserActualAvgRating;
-            else return avgUserRatingForQueryMovie;
+            else return (queryUserActualAvgRating + avgUserRatingForQueryMovie) / 2;
         }
     }
 }
