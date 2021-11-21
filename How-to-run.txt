@@ -1,0 +1,7 @@
+Prerequisite: Java must be installed and in System's PATH.
+
+1. Extract the folder somewhere.
+2. Go inside RecommendationSystem where you will see "src", "test-data", "training-data" and also a sources.txt file.
+3. Compile the java files using this command: javac -d . @sources.txt
+4. Run the program using this command: java RecommendationSystemMain
+5. Type the number for the algorithm to execute and press enter. For example, press 1 and enter to execute with User based cosine similarity.
