@@ -32,7 +32,7 @@ public class RecommendationSystemMain {
         Util.deleteDir(new File(OUTPUT_DIR));
         Files.createDirectories(Paths.get(OUTPUT_DIR));
         List<List<Double>> trainingData = Util.parseTrainingDataFile(TRAINING_DATA_FILE_PATH);
-        List<Double> avgUserRatingsForMovies = Util.getEachMoviesAvgRatingWithThreshold(trainingData, 5);
+        List<Double> avgUserRatingsForMovies = Util.getEachMoviesAvgRatingWithThreshold(trainingData, 0);
         RatingAlgorithm ratingAlgorithm = RatingAlgorithm.getAlgorithm(algorithmEnum, trainingData,
                 avgUserRatingsForMovies);
         for (Map.Entry<String, String> fileEntry : TEST_INPUT_OUTPUT_FILE_MAP.entrySet()) {

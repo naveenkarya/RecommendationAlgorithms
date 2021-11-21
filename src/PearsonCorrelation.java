@@ -6,6 +6,7 @@ public class PearsonCorrelation extends RatingAlgorithm {
     private List<Double> iufList;
     boolean useInverseUserFrequency;
     boolean useCaseModification;
+    int K = 20;
 
     public PearsonCorrelation(List<List<Double>> trainingData, List<Double> avgUserRatingsForMovies) {
         this(trainingData, avgUserRatingsForMovies, false, false);
@@ -23,9 +24,6 @@ public class PearsonCorrelation extends RatingAlgorithm {
     }
 
     public double estimateUserRatingForAMovie(final Map<Integer, Double> queryUserRatingMapOrig, int queryMovieId) {
-        int minK = minKMap.get(queryUserRatingMapOrig.size());
-        int maxK = maxKMap.get(queryUserRatingMapOrig.size());
-
         PriorityQueue<PearsonWeightedRating> kNearestUsers =
                 new PriorityQueue<>(Comparator.comparingDouble(PearsonWeightedRating::getWeight).thenComparing(PearsonWeightedRating::getNumOfCommonMovies));
         double queryUserActualAvgRating = queryUserRatingMapOrig.values().stream().mapToDouble(a -> a).average().getAsDouble();
@@ -62,16 +60,15 @@ public class PearsonCorrelation extends RatingAlgorithm {
                     trainingUserVector.set(i, trainingUserVector.get(i) - trainingUserAvgRating);
                 }
                 double cosineSimilarity = Util.cosineSimilarity(queryUserVector, trainingUserVector);
-                // Threshold similarity 0.5
-                if(Math.abs(cosineSimilarity) > 0.5) {
+                // Threshold similarity 0.2
+                if(Math.abs(cosineSimilarity) > 0.2) {
                     kNearestUsers.add(new PearsonWeightedRating(cosineSimilarity,
                             trainingData.get(trainingUserId - 1).get(queryMovieId - 1), actualTrainingUserAvgRating, trainingUserVector.size()));
+                    if(kNearestUsers.size() > K) {
+                        kNearestUsers.poll();
+                    }
                 }
             }
-        }
-        if (kNearestUsers.size() > 1) {
-            while (kNearestUsers.size() > minK && kNearestUsers.peek().getWeight() < 0.9) kNearestUsers.poll();
-            while (kNearestUsers.size() > maxK) kNearestUsers.poll();
         }
         if (kNearestUsers.size() > 0) {
             double weightedRatingSum = 0.0;
