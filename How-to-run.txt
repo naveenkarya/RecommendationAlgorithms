@@ -1,4 +1,4 @@
-Prerequisite: Java must be installed and in System's PATH.
+Prerequisite: Java must be installed and in System's PATH. I have Java version 16, but I think Java version 9 will work too.
 
 1. The extracted project files will contain "src", "test-data", "training-data" folders as well as a "sources.txt" file.
 2. Go to command prompt and under the current directory where all these files are present. 
