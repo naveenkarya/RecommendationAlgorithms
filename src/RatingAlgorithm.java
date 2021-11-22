@@ -29,6 +29,8 @@ public abstract class RatingAlgorithm {
                 return new UserAndItemAverage(trainingData, avgUserRatingsForMovies);
             case COSINE_SIMILARITY_AND_ITEM_BASED:
                 return new CosineSimilarityAndItemBased(trainingData, avgUserRatingsForMovies);
+            case COSINE_SIMILARITY_AND_ITEM_BASED_AND_AVG:
+                return new CosineSimilarityAndItemBasedAndAvg(trainingData, avgUserRatingsForMovies);
             case NORMALIZED_EUCLIDEAN_DISTANCE:
                 return new GenericRatingAlgorithm(trainingData, avgUserRatingsForMovies, GenericRatingAlgorithm.NORMALIZED_EUCLIDEAN_DISTANCE, "", 0.3);
             case EUCLIDEAN_DISTANCE_WITH_LOG_BASE:

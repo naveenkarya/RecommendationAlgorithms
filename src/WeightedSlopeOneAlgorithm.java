@@ -49,7 +49,7 @@ public class WeightedSlopeOneAlgorithm extends RatingAlgorithm {
         double rating = 0;
         if(sum >= 0 && count >= 5) rating = sum/count;
         if(rating != 0) {
-            return (short) rating;
+            return rating;
         }
         else {
             double avgUserRatingForQueryMovie = avgUserRatingsForMovies.get(queryMovieId - 1);

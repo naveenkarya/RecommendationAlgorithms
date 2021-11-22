@@ -6,10 +6,11 @@ public enum AlgorithmEnum {
     ITEM_BASED_CF( "5", "Item-Based-Collaborative-Filtering"),
     USER_AND_ITEMS_AVERAGE("6", "User's and Item's Average"),
     COSINE_SIMILARITY_AND_ITEM_BASED("7", "Cosine Similarity With Item Based"),
-    NORMALIZED_EUCLIDEAN_DISTANCE("8", "Normalized-Euclidean-Distance"),
-    EUCLIDEAN_DISTANCE_WITH_LOG_BASE("9", "Euclidean-Distance-With-Log-Base"),
-    EUCLIDEAN_DISTANCE_WITH_JACCARD("10", "Euclidean-Distance-With-Jaccard"),
-    WEIGHTED_SLOPE_ONE("11", "Weighted Slope-One");
+    COSINE_SIMILARITY_AND_ITEM_BASED_AND_AVG("8", "Cosine Similarity With Item Based And Movie's Average"),
+    NORMALIZED_EUCLIDEAN_DISTANCE("9", "Normalized-Euclidean-Distance"),
+    EUCLIDEAN_DISTANCE_WITH_LOG_BASE("10", "Euclidean-Distance-With-Log-Base"),
+    EUCLIDEAN_DISTANCE_WITH_JACCARD("11", "Euclidean-Distance-With-Jaccard"),
+    WEIGHTED_SLOPE_ONE("12", "Weighted Slope-One");
 
     private final String algoCode;
     private final String algoName;

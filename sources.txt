@@ -1,5 +1,6 @@
 src\AlgorithmEnum.java
 src\CosineSimilarityAndItemBased.java
+src\CosineSimilarityAndItemBasedAndAvg.java
 src\DataCreation.java
 src\GenericRatingAlgorithm.java
 src\ItemBasedFiltering.java
