@@ -4,13 +4,15 @@ public enum AlgorithmEnum {
     PEARSON_CORRELATION_IUF_ONLY("3", "Pearson-Correlation-With-IUF-Only"),
     PEARSON_CORRELATION_CASE_MOD_ONLY("4", "Pearson-Correlation-With-CaseMod_Only"),
     ITEM_BASED_CF( "5", "Item-Based-Collaborative-Filtering"),
+
     USER_AND_ITEMS_AVERAGE("6", "User's and Item's Average"),
-    COSINE_SIMILARITY_AND_ITEM_BASED("7", "Cosine Similarity With Item Based"),
-    COSINE_SIMILARITY_AND_ITEM_BASED_AND_AVG("8", "Cosine Similarity With Item Based And Movie's Average"),
-    NORMALIZED_EUCLIDEAN_DISTANCE("9", "Normalized-Euclidean-Distance"),
-    EUCLIDEAN_DISTANCE_WITH_LOG_BASE("10", "Euclidean-Distance-With-Log-Base"),
-    EUCLIDEAN_DISTANCE_WITH_JACCARD("11", "Euclidean-Distance-With-Jaccard"),
-    WEIGHTED_SLOPE_ONE("12", "Weighted Slope-One");
+    WEIGHTED_SLOPE_ONE("7", "Weighted Slope-One"),
+    WEIGHTED_SLOPE_ONE_WITH_MOVIE_AVG("8", "Weighted Slope-One with User and Movie's Average"),
+    COSINE_SIMILARITY_AND_ITEM_BASED("9", "Cosine Similarity With Item Based"),
+    NORMALIZED_EUCLIDEAN_DISTANCE("10", "Normalized-Euclidean-Distance"),
+    EUCLIDEAN_DISTANCE_WITH_LOG_BASE("11", "Euclidean-Distance-With-Log-Base"),
+    EUCLIDEAN_DISTANCE_WITH_JACCARD("12", "Euclidean-Distance-With-Jaccard");
+
 
     private final String algoCode;
     private final String algoName;

@@ -2,3 +2,5 @@
 /out
 *.iml
 /result
+*.zip
+*.pdf
