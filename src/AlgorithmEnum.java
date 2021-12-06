@@ -11,7 +11,9 @@ public enum AlgorithmEnum {
     COSINE_SIMILARITY_AND_ITEM_BASED("9", "Cosine Similarity With Item Based"),
     NORMALIZED_EUCLIDEAN_DISTANCE("10", "Normalized-Euclidean-Distance"),
     EUCLIDEAN_DISTANCE_WITH_LOG_BASE("11", "Euclidean-Distance-With-Log-Base"),
-    EUCLIDEAN_DISTANCE_WITH_JACCARD("12", "Euclidean-Distance-With-Jaccard");
+    EUCLIDEAN_DISTANCE_WITH_JACCARD("12", "Euclidean-Distance-With-Jaccard"),
+    BIPOLAR_SLOPE_ONE("13", "Bipolar Slope-One"),
+    BIPOLAR_SLOPE_ONE_WITH_MOVIE_AVG("14", "Bipolar Slope-One with User and Movie's Average");
 
 
     private final String algoCode;

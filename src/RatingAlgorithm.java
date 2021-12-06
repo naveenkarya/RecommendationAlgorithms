@@ -31,6 +31,10 @@ public abstract class RatingAlgorithm {
                 return new WeightedSlopeOneAlgorithm(trainingData, avgUserRatingsForMovies);
             case WEIGHTED_SLOPE_ONE_WITH_MOVIE_AVG:
                 return new WeightedSlopeWithMovieAvg(trainingData, avgUserRatingsForMovies);
+            case BIPOLAR_SLOPE_ONE:
+                return new BipolarSlopeOneAlgorithm(trainingData, avgUserRatingsForMovies);
+            case BIPOLAR_SLOPE_ONE_WITH_MOVIE_AVG:
+                return new BipolarSlopeWithMovieAvg(trainingData, avgUserRatingsForMovies);
             case COSINE_SIMILARITY_AND_ITEM_BASED:
                 return new CosineSimilarityAndItemBased(trainingData, avgUserRatingsForMovies);
             case NORMALIZED_EUCLIDEAN_DISTANCE:

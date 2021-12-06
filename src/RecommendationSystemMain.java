@@ -10,14 +10,14 @@ public class RecommendationSystemMain {
     private static final String OUTPUT_DIR = "result";
     private static final String TEST_DATA_DIR = "test-data";
 
-    /*private static final String TRAINING_DATA_FILE_PATH = "training-data/custom-train-test.txt";
+    private static final String TRAINING_DATA_FILE_PATH = "training-data/custom-train-test.txt";
     private static final Map<String, String> TEST_INPUT_OUTPUT_FILE_MAP = Map.of("custom-test.txt",
     "custom-predicted" +
-            "-result.txt");*/
-    private static final String TRAINING_DATA_FILE_PATH = "training-data/train.txt";
+            "-result.txt");
+    /*private static final String TRAINING_DATA_FILE_PATH = "training-data/train.txt";
     private static final Map<String, String> TEST_INPUT_OUTPUT_FILE_MAP = Map.of("test5.txt", "result5.txt",
             "test10" +
-                    ".txt", "result10.txt", "test20.txt", "result20.txt");
+                    ".txt", "result10.txt", "test20.txt", "result20.txt");*/
 
     public static void main(String[] args) throws IOException {
         for (AlgorithmEnum algo : AlgorithmEnum.values()) {
@@ -88,8 +88,12 @@ public class RecommendationSystemMain {
             // Handle overflows and underflows
             if (rating < 1) {
                 rating = 1;
+                System.out.println("less than 1: "+rating);
             }
-            if (rating > 5) rating = 5;
+            if (rating > 5){
+                rating = 5;
+                System.out.println("greater than 5: "+rating);
+            }
             resultList.add(new OutputFormat(queryUserId, queryMovieId, rating));
         }
         resultList.sort(Comparator.comparingInt(OutputFormat::getUserId).thenComparingInt(OutputFormat::getMovieId));
