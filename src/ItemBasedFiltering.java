@@ -2,6 +2,7 @@ import java.util.*;
 
 public class ItemBasedFiltering extends RatingAlgorithm {
     List<Double> eachUsersAvgRatings;
+    int K = 25;
 
     public ItemBasedFiltering(List<List<Double>> trainingData, List<Double> avgUserRatingsForMovies) {
         super(trainingData, avgUserRatingsForMovies);
@@ -10,14 +11,17 @@ public class ItemBasedFiltering extends RatingAlgorithm {
 
     public double estimateUserRatingForAMovie(Map<Integer, Double> queryUserRatingMap, int queryMovieId) {
         PriorityQueue<WeightedRating> kNearestMovies =
-                new PriorityQueue<>(Comparator.comparingDouble(WeightedRating::getWeight).thenComparing(WeightedRating::getNumOfCommonMovies));
+                new PriorityQueue<>(Comparator.comparingDouble(WeightedRating::getWeight));
         double queryUserActualAvgRating =
                 queryUserRatingMap.values().stream().mapToDouble(a -> a).average().getAsDouble();
         for (Map.Entry<Integer, Double> queryUserRatingForAMovie : queryUserRatingMap.entrySet()) {
             int currMovieId = queryUserRatingForAMovie.getKey();
             double queryUserRatingForCurrMovie = queryUserRatingForAMovie.getValue();
+            // The movie we want to rate
             List<Double> queryMovieVector = new ArrayList<>();
+            // The movie with which we are comparing
             List<Double> currMovieVector = new ArrayList<>();
+            // Build vectors of the movie we want to rate and the movie with which we are comparing
             for (int userId = 1; userId <= trainingData.size(); userId++) {
                 double queryMovieRatingByUser = trainingData.get(userId - 1).get(queryMovieId - 1);
                 double currMovieRatingByUser = trainingData.get(userId - 1).get(currMovieId - 1);
@@ -26,10 +30,12 @@ public class ItemBasedFiltering extends RatingAlgorithm {
                     currMovieVector.add(currMovieRatingByUser - eachUsersAvgRatings.get(userId - 1));
                 }
             }
+            //Ignore unit vectors
             if (queryMovieVector.size() >= 2) {
                 double cosineSimilarity = Util.cosineSimilarity(queryMovieVector, currMovieVector);
                 kNearestMovies.add(new WeightedRating(Math.round(cosineSimilarity * 100.0) / 100.0,
-                            queryUserRatingForCurrMovie, queryMovieVector.size()));
+                            queryUserRatingForCurrMovie));
+                if(kNearestMovies.size() > K) kNearestMovies.poll();
 
             }
         }

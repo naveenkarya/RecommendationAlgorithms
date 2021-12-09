@@ -5,75 +5,72 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
 
+/**
+ * Source of the data:
+ * https://grouplens.org/datasets/movielens/
+ * F. Maxwell Harper and Joseph A. Konstan. 2015. The MovieLens Datasets: History and Context. ACM Transactions on Interactive Intelligent Systems (TiiS) 5, 4: 19:1–19:19. https://doi.org/10.1145/2827872
+ */
 public class RecommendationSystemMain {
-    // TODO: Remove test files and extra variables
     private static final String OUTPUT_DIR = "result";
-    private static final String TEST_DATA_DIR = "test-data";
+    public static final String PREDICTED_RESULT_PATH = OUTPUT_DIR + "/" + "custom-predicted-result.txt";
 
-    private static final String TRAINING_DATA_FILE_PATH = "training-data/custom-train-test.txt";
-    private static final Map<String, String> TEST_INPUT_OUTPUT_FILE_MAP = Map.of("custom-test.txt",
-    "custom-predicted" +
-            "-result.txt");
-    /*private static final String TRAINING_DATA_FILE_PATH = "training-data/train.txt";
-    private static final Map<String, String> TEST_INPUT_OUTPUT_FILE_MAP = Map.of("test5.txt", "result5.txt",
-            "test10" +
-                    ".txt", "result10.txt", "test20.txt", "result20.txt");*/
-
+    // Main method to be executed
     public static void main(String[] args) throws IOException {
+        // Read input from command line
         for (AlgorithmEnum algo : AlgorithmEnum.values()) {
             System.out.println("Enter " + algo.getAlgoCode() + " for " + algo.getAlgoName());
         }
-        Scanner myObj = new Scanner(System.in);
-        String algoCode = myObj.nextLine().trim();
+        Scanner inScanner = new Scanner(System.in);
+        String algoCode = inScanner.nextLine().trim();
+        inScanner.close();
         AlgorithmEnum algorithmEnum = AlgorithmEnum.fromCode(algoCode);
         System.out.println("Executing with algorithm: " + algorithmEnum.getAlgoName());
         System.out.println("...");
+        // Delete already existing output directory and create new output directory
         Util.deleteDir(new File(OUTPUT_DIR));
         Files.createDirectories(Paths.get(OUTPUT_DIR));
-        List<List<Double>> trainingData = Util.parseTrainingDataFile(TRAINING_DATA_FILE_PATH);
-        List<Double> avgUserRatingsForMovies = Util.getEachMoviesAvgRatingWithThreshold(trainingData, 0);
+        // Parse training data and store it as a matrix
+        List<List<Double>> trainingData = Util.parseTrainingDataFile(DataCreation.FORMATTED_TRAINING_DATA_PATH);
+        List<Double> avgUserRatingsForMovies = Util.getEachMoviesAvgRatingWithThreshold(trainingData);
         RatingAlgorithm ratingAlgorithm = RatingAlgorithm.getAlgorithm(algorithmEnum, trainingData,
                 avgUserRatingsForMovies);
-        for (Map.Entry<String, String> fileEntry : TEST_INPUT_OUTPUT_FILE_MAP.entrySet()) {
-            String testInputFileName = TEST_DATA_DIR + "/" + fileEntry.getKey();
-            String outputFileName = OUTPUT_DIR + "/" + fileEntry.getValue();
-            File outputFile = new File(outputFileName);
-            outputFile.createNewFile();
-            FileWriter outputFileWriter = new FileWriter(outputFile);
-            Scanner inputScanner = new Scanner(new File(testInputFileName));
-            try {
-                int lastUserId = -1;
-                Map<Integer, Double> userRatingMap = null;
-                List<Integer> queryList = null;
-                do {
-                    String userLine = inputScanner.nextLine();
-                    String[] userData = userLine.split(" ");
-                    int userId = Integer.parseInt(userData[0]);
-                    if (userId != lastUserId) {
-                        List<OutputFormat> resultList = estimateRatingsForUserBlock(userRatingMap, lastUserId,
-                                queryList,
-                                ratingAlgorithm);
-                        Util.writeToOutputFile(outputFileWriter, resultList);
-                        userRatingMap = new HashMap<>();
-                        queryList = new ArrayList<>();
-                        lastUserId = userId;
-                    }
-                    int movieId = Integer.parseInt(userData[1]);
-                    double movieRating = Double.parseDouble(userData[2]);
-                    if (movieRating == 0) queryList.add(movieId);
-                    else userRatingMap.put(movieId, movieRating);
+        File outputFile = new File(PREDICTED_RESULT_PATH);
+        outputFile.createNewFile();
+        FileWriter outputFileWriter = new FileWriter(outputFile);
+        Scanner inputScanner = new Scanner(new File(DataCreation.TEST_DATA_PATH));
+        // Parse each line of test-data one line at a time.
+        try {
+            int lastUserId = -1;
+            Map<Integer, Double> userRatingMap = null;
+            List<Integer> queryList = null;
+            do {
+                String userLine = inputScanner.nextLine();
+                String[] userData = userLine.split(" ");
+                int userId = Integer.parseInt(userData[0]);
+                if (userId != lastUserId) {
+                    List<OutputFormat> resultList = estimateRatingsForUserBlock(userRatingMap, lastUserId,
+                            queryList,
+                            ratingAlgorithm);
+                    Util.writeToOutputFile(outputFileWriter, resultList);
+                    userRatingMap = new HashMap<>();
+                    queryList = new ArrayList<>();
+                    lastUserId = userId;
                 }
-                while (inputScanner.hasNextLine());
-                List<OutputFormat> resultList = estimateRatingsForUserBlock(userRatingMap, lastUserId, queryList,
-                        ratingAlgorithm);
-                Util.writeToOutputFile(outputFileWriter, resultList);
-            } finally {
-                inputScanner.close();
-                outputFileWriter.close();
+                int movieId = Integer.parseInt(userData[1]);
+                double movieRating = Double.parseDouble(userData[2]);
+                if (movieRating == 0) queryList.add(movieId);
+                else userRatingMap.put(movieId, movieRating);
             }
+            while (inputScanner.hasNextLine());
+            List<OutputFormat> resultList = estimateRatingsForUserBlock(userRatingMap, lastUserId, queryList,
+                    ratingAlgorithm);
+            Util.writeToOutputFile(outputFileWriter, resultList);
+        } finally {
+            inputScanner.close();
+            outputFileWriter.close();
         }
         System.out.println("Execution completed. Result files are generated in the result folder.");
-        MAECalculator.printMAE("result/custom-predicted-result.txt", "test-data/custom-result.txt");
+        MAECalculator.printMAE(PREDICTED_RESULT_PATH, DataCreation.TEST_RESULT_PATH);
     }
 
 
@@ -88,11 +85,9 @@ public class RecommendationSystemMain {
             // Handle overflows and underflows
             if (rating < 1) {
                 rating = 1;
-                System.out.println("less than 1: "+rating);
             }
-            if (rating > 5){
+            if (rating > 5) {
                 rating = 5;
-                System.out.println("greater than 5: "+rating);
             }
             resultList.add(new OutputFormat(queryUserId, queryMovieId, rating));
         }

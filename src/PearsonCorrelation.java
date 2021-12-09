@@ -25,8 +25,9 @@ public class PearsonCorrelation extends RatingAlgorithm {
 
     public double estimateUserRatingForAMovie(final Map<Integer, Double> queryUserRatingMapOrig, int queryMovieId) {
         PriorityQueue<PearsonWeightedRating> kNearestUsers =
-                new PriorityQueue<>(Comparator.comparingDouble(PearsonWeightedRating::getWeight).thenComparing(PearsonWeightedRating::getNumOfCommonMovies));
-        double queryUserActualAvgRating = queryUserRatingMapOrig.values().stream().mapToDouble(a -> a).average().getAsDouble();
+                new PriorityQueue<>(Comparator.comparingDouble(PearsonWeightedRating::getWeight));
+        double queryUserActualAvgRating =
+                queryUserRatingMapOrig.values().stream().mapToDouble(a -> a).average().getAsDouble();
         // Normalize ratings if IUF is being used
         Map<Integer, Double> queryUserRatingMap = normalizeUsingIUF(queryUserRatingMapOrig);
         double queryUserAvgRating = queryUserRatingMap.values().stream().mapToDouble(a -> a).average().getAsDouble();
@@ -52,7 +53,7 @@ public class PearsonCorrelation extends RatingAlgorithm {
                 }
             }
 
-            // ignore 1 dimension vectors
+            // ignore unit vectors
             if (trainingUserVector.size() >= 2) {
                 // Subtract average from the ratings
                 for (int i = 0; i < queryUserVector.size(); i++) {
@@ -61,10 +62,10 @@ public class PearsonCorrelation extends RatingAlgorithm {
                 }
                 double cosineSimilarity = Util.cosineSimilarity(queryUserVector, trainingUserVector);
                 // Threshold similarity 0.2
-                if(Math.abs(cosineSimilarity) > 0.2) {
+                if (Math.abs(cosineSimilarity) > 0.2) {
                     kNearestUsers.add(new PearsonWeightedRating(cosineSimilarity,
-                            trainingData.get(trainingUserId - 1).get(queryMovieId - 1), actualTrainingUserAvgRating, trainingUserVector.size()));
-                    if(kNearestUsers.size() > K) {
+                            trainingData.get(trainingUserId - 1).get(queryMovieId - 1), actualTrainingUserAvgRating));
+                    if (kNearestUsers.size() > K) {
                         kNearestUsers.poll();
                     }
                 }
@@ -86,9 +87,10 @@ public class PearsonCorrelation extends RatingAlgorithm {
             double weightedAvgRating = queryUserActualAvgRating + (weightedRatingSum / totalWeight);
             return weightedAvgRating;
         } else {
-            // Not enough similar users found. Take average of <user's average rating> and <average rating of that movie> in the corpus
+            // Not enough similar users found. Take average of <user's average rating> and <average rating of that
+            // movie> in the corpus
             double avgUserRatingForQueryMovie = avgUserRatingsForMovies.get(queryMovieId - 1);
-            if(avgUserRatingForQueryMovie == 0) return queryUserActualAvgRating;
+            if (avgUserRatingForQueryMovie == 0) return queryUserActualAvgRating;
             else return (queryUserActualAvgRating + avgUserRatingForQueryMovie) / 2;
         }
     }
@@ -109,7 +111,7 @@ public class PearsonCorrelation extends RatingAlgorithm {
     }
 
     private Map<Integer, Double> normalizeUsingIUF(Map<Integer, Double> queryUserRatingMap) {
-        if(useInverseUserFrequency) {
+        if (useInverseUserFrequency) {
             Map<Integer, Double> mapWithIUFValues = new HashMap<>();
             for (Map.Entry<Integer, Double> entry : queryUserRatingMap.entrySet()) {
                 mapWithIUFValues.put(entry.getKey(), entry.getValue() * iufList.get(entry.getKey() - 1));

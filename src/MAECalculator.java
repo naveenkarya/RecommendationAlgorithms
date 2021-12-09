@@ -2,11 +2,6 @@ import java.io.File;
 import java.util.Scanner;
 
 public class MAECalculator {
-    // TODO: Remove it and other related files.
-    public static void main(String[] args) {
-        printMAE("result/result5.txt", "result/example_result5.txt");
-        //printMAE("result/custom-predicted-result.txt", "test-data/custom-result.txt");
-    }
     public static void printMAE(String predictedResultFileName, String actualResultFileName) {
         Scanner predictedResultScanner = null;
         Scanner actualResultScanner = null;
@@ -42,10 +37,9 @@ public class MAECalculator {
             //sum = Math.sqrt(sum);
             System.out.println("MAE: " + sum);
         } catch (Exception e) {
-        }
-        finally {
-            if(predictedResultScanner != null) predictedResultScanner.close();
-            if(actualResultScanner != null) actualResultScanner.close();
+        } finally {
+            if (predictedResultScanner != null) predictedResultScanner.close();
+            if (actualResultScanner != null) actualResultScanner.close();
         }
     }
 }

@@ -2,14 +2,11 @@ public class PearsonWeightedRating {
     private double weight;
     private double rating;
     private double trainingUserAverageRating;
-    private double numOfCommonMovies;
 
-    public PearsonWeightedRating(double weight, double rating, double trainingUserAverageRating,
-                                 double numOfCommonMovies) {
+    public PearsonWeightedRating(double weight, double rating, double trainingUserAverageRating) {
         this.weight = weight;
         this.rating = rating;
         this.trainingUserAverageRating = trainingUserAverageRating;
-        this.numOfCommonMovies = numOfCommonMovies;
     }
 
     public double getWeight() {
@@ -24,7 +21,4 @@ public class PearsonWeightedRating {
         return trainingUserAverageRating;
     }
 
-    public double getNumOfCommonMovies() {
-        return numOfCommonMovies;
-    }
 }

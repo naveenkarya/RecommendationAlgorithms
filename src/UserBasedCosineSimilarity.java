@@ -7,10 +7,8 @@ public class UserBasedCosineSimilarity extends RatingAlgorithm {
     }
 
     public double estimateUserRatingForAMovie(Map<Integer, Double> queryUserRatingMap, int queryMovieId) {
-        int minK = minKMap.get(queryUserRatingMap.size());
-        int maxK = maxKMap.get(queryUserRatingMap.size());
         PriorityQueue<WeightedRating> kNearestUsers =
-                new PriorityQueue<>(Comparator.comparingDouble(WeightedRating::getWeight).thenComparing(WeightedRating::getNumOfCommonMovies));
+                new PriorityQueue<>(Comparator.comparingDouble(WeightedRating::getWeight));
         double queryUserActualAvgRating =
                 queryUserRatingMap.values().stream().mapToDouble(a -> a).average().getAsDouble();
         for (int trainingUserId = 1; trainingUserId <= trainingData.size(); trainingUserId++) {
@@ -18,7 +16,8 @@ public class UserBasedCosineSimilarity extends RatingAlgorithm {
             // Compare with user only if that user has rated the movie we need to predict the rating for
             if (trainingUserRatings.get(queryMovieId - 1) == 0) continue;
 
-            // Calculate current user and training user's vectors
+            // Calculate current user vector (for whom we need to rate) and training user's vector (the user with
+            // which we are comparing)
             List<Double> queryUserVector = new ArrayList<>();
             List<Double> trainingUserVector = new ArrayList<>();
             for (Map.Entry<Integer, Double> queryUserRatingForAMovie : queryUserRatingMap.entrySet()) {
@@ -31,17 +30,14 @@ public class UserBasedCosineSimilarity extends RatingAlgorithm {
                     trainingUserVector.add(trainingUserRating);
                 }
             }
-           if (trainingUserVector.size() >= 2) {
+            //Ignore unit vectors
+            if (trainingUserVector.size() >= 2) {
                 double cosineSimilarity = Util.cosineSimilarity(queryUserVector, trainingUserVector);
-                if(cosineSimilarity > 0.7) {
-                    kNearestUsers.add(new WeightedRating(Math.round(cosineSimilarity * 100.0) / 100.0,
-                            trainingUserRatings.get(queryMovieId - 1), trainingUserVector.size()));
+                if (cosineSimilarity > 0.7) {
+                    kNearestUsers.add(new WeightedRating(cosineSimilarity, trainingUserRatings.get(queryMovieId - 1)));
+                    if (kNearestUsers.size() > K) kNearestUsers.poll();
                 }
             }
-        }
-        if (kNearestUsers.size() > 1) {
-            while (kNearestUsers.size() > minK && kNearestUsers.peek().getWeight() < 0.9) kNearestUsers.poll();
-            while (kNearestUsers.size() > maxK) kNearestUsers.poll();
         }
         if (kNearestUsers.size() > 0) {
             double avgRating = 0.0;

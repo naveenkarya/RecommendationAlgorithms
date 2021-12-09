@@ -1,5 +1,9 @@
 import java.util.*;
 
+/**
+ * Generic Rating Algorithm that multiplies 2 similarity metrics. Any 2 of these metrics can be combined:
+ * Cosine Similarity, Jaccard Similarity, Simple Log Similarity, Euclidean Similarity, Normalized-Euclidean_Distance
+ */
 public class GenericRatingAlgorithm extends RatingAlgorithm {
     public static final String COSINE_SIMILARITY = "Cosine_Similarity";
     public static final String JACCARD_SIMILARITY = "Jaccard_Similarity";
@@ -42,7 +46,7 @@ public class GenericRatingAlgorithm extends RatingAlgorithm {
                     trainingUserVector.add(trainingUserRating);
                 }
             }
-            // If vector size is one and ratings are same then add to the nearest users with weight 0.3
+            // ignore unit vectors
             if (trainingUserVector.size() >= 2) {
                 double similarity1 = getSimilarity(similarityMetric1, queryUserVector, trainingUserVector, trainingUserRatings, queryUserRatingMap);
                 if(similarityMetric1.equals(COSINE_SIMILARITY) && similarity1 < 0.7) continue;
@@ -50,7 +54,7 @@ public class GenericRatingAlgorithm extends RatingAlgorithm {
                 double combinedSimilarity = similarity1 * similarity2;
                 if(combinedSimilarity > threshold) {
                     kNearestUsers.add(new WeightedRating(similarity1 * similarity2,
-                            trainingUserRatings.get(queryMovieId - 1), trainingUserVector.size()));
+                            trainingUserRatings.get(queryMovieId - 1)));
                     if (kNearestUsers.size() > K) {
                         kNearestUsers.poll();
                     }

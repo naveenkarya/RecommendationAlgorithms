@@ -14,7 +14,6 @@ public class UserAndItemAverage extends RatingAlgorithm {
         double avgUserRatingForQueryMovie = avgUserRatingsForMovies.get(queryMovieId - 1);
         if (avgUserRatingForQueryMovie == 0) {
             return queryUserActualAvgRating;
-        }
-        else return (avgUserRatingForQueryMovie + queryUserActualAvgRating)/2;
+        } else return (avgUserRatingForQueryMovie + queryUserActualAvgRating) / 2;
     }
 }

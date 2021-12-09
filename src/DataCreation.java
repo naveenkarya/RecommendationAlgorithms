@@ -4,7 +4,17 @@ import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Creates a subset of training data (200 users) in a format that this program can run.
+ */
 public class DataCreation {
+
+    public static final String UNFORMATTED_RATINGS_PATH = "training-data/ratings.csv";
+    public static final String UNFORMATTED_MOVIES_PATH = "training-data/movies.csv";
+    public static final String FORMATTED_TRAINING_DATA_PATH = "training-data/training-data.txt";
+    public static final String TEST_DATA_PATH = "test-data/custom-test.txt";
+    public static final String TEST_RESULT_PATH = "test-data/custom-result.txt";
+
     private static class Pair {
         int movieId;
         String rating;
@@ -14,15 +24,27 @@ public class DataCreation {
             this.rating = rating;
         }
     }
-    //TODO: Remove it and other related files.
+
     public static void main(String[] args) throws IOException {
-        Map<Integer, Integer> movieIdMap = getMovieIdMap();
-        //createTrainingData(movieIdMap);
-        //createTestData(movieIdMap);
+        System.out.println("Enter 1 to create data. movies.csv and ratings.csv should be " +
+                "present inside training-data folder");
+        Scanner inScanner = new Scanner(System.in);
+        int code = inScanner.nextInt();
+        inScanner.close();
+        if (code == 1) {
+            Util.deleteFileAtPath(TEST_DATA_PATH);
+            Util.deleteFileAtPath(TEST_RESULT_PATH);
+            Util.deleteFileAtPath(FORMATTED_TRAINING_DATA_PATH);
+            Map<Integer, Integer> movieIdMap = getMovieIdMap();
+            createTrainingData(movieIdMap);
+            createTestData(movieIdMap);
+        } else {
+            System.out.println("Skipping data creation");
+        }
     }
 
     private static Map<Integer, Integer> getMovieIdMap() throws IOException {
-        File file = new File("training-data/custom-movies-unformatted.txt");
+        File file = new File(UNFORMATTED_MOVIES_PATH);
         Scanner scanner = new Scanner(file);
         List<String> t = new ArrayList<>();
         Map<Integer, Integer> movieIdMap = new HashMap<>();
@@ -38,9 +60,9 @@ public class DataCreation {
     }
 
     private static void createTestData(Map<Integer, Integer> movieIdMap) throws IOException {
-        File file = new File("training-data/custom-ratings-unformatted.txt");
-        FileWriter fileWriterTestData = new FileWriter("test-data/custom-test.txt");
-        FileWriter fileWriterResult = new FileWriter("test-data/custom-result.txt");
+        File file = new File(UNFORMATTED_RATINGS_PATH);
+        FileWriter fileWriterTestData = new FileWriter(TEST_DATA_PATH);
+        FileWriter fileWriterResult = new FileWriter(TEST_RESULT_PATH);
         Scanner scanner = new Scanner(file);
         Map<Integer, List<Pair>> map = new LinkedHashMap<>();
         while (scanner.hasNextLine()) {
@@ -60,7 +82,7 @@ public class DataCreation {
             List<Pair> movies = entry.getValue();
             if (movies.size() < 20) continue;
             int ratingsToCopy = 5;
-            if(userId > 400) {
+            if (userId > 400) {
                 ratingsToCopy = 10;
             }
             for (int i = 0; i < ratingsToCopy; i++) {
@@ -76,8 +98,8 @@ public class DataCreation {
     }
 
     private static void createTrainingData(Map<Integer, Integer> movieIdMap) throws IOException {
-        File file = new File("training-data/custom-ratings-unformatted.txt");
-        FileWriter fileWriter = new FileWriter("training-data/custom-train-test.txt");
+        File file = new File(UNFORMATTED_RATINGS_PATH);
+        FileWriter fileWriter = new FileWriter(FORMATTED_TRAINING_DATA_PATH);
         Scanner scanner = new Scanner(file);
         List<String> t = new ArrayList<>();
         String[][] data = new String[200][9742];

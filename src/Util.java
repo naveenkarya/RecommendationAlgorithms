@@ -43,6 +43,12 @@ public class Util {
         return Math.log(number) / Math.log(base);
     }
 
+    /**
+     *
+     * @param vector1
+     * @param vector2
+     * @return Returns cosine similarity of two vectors
+     */
     public static double cosineSimilarity(List<Double> vector1, List<Double> vector2) {
         double dotProduct = 0.0;
         double vector1Size = 0;
@@ -60,6 +66,12 @@ public class Util {
         return cosineSimilarity;
     }
 
+    /**
+     *
+     * @param vector1
+     * @param vector2
+     * @return Returns Inverse Euclidean distance between the two vectors
+     */
     public static double inverseEuclideanDistance(List<Double> vector1, List<Double> vector2) {
         double sum = 0.0;
         for (int i = 0; i < vector2.size(); i++) {
@@ -70,6 +82,12 @@ public class Util {
         return 1 / (1 + Math.sqrt(sum));
     }
 
+    /**
+     *
+     * @param vector1
+     * @param vector2
+     * @return Returns the mean Euclidean distance between the two vectors
+     */
     public static double meanEuclideanDistance(List<Double> vector1, List<Double> vector2) {
         double sum = 0.0;
         double max = 0.0;
@@ -83,7 +101,7 @@ public class Util {
     }
 
     /**
-     * Writes the result list to the file
+     * Writes the result list to the output file
      */
     public static void writeToOutputFile(FileWriter outputFileWriter, List<OutputFormat> resultList) throws IOException {
         for (OutputFormat outputFormat : resultList) {
@@ -93,7 +111,7 @@ public class Util {
     }
 
     /**
-     * Deletes a directory with all its contents
+     * Deletes a directory with all its contents recursively
      */
     public static boolean deleteDir(File dirToDelete) {
         File[] files = dirToDelete.listFiles();
@@ -105,7 +123,13 @@ public class Util {
         return dirToDelete.delete();
     }
 
-    public static List<Double> getEachMoviesAvgRatingWithThreshold(List<List<Double>> trainingData, int threshold) {
+
+    /**
+     * @param trainingData Training Data matrix
+     * @return A list of average ratings. The item at i-th index of the list represents the average
+     * rating that the users have given to the movie number (i + 1)
+     */
+    public static List<Double> getEachMoviesAvgRatingWithThreshold(List<List<Double>> trainingData) {
         List<Double> avgUserRatings = new ArrayList<>();
         for (int i = 0; i < trainingData.get(0).size(); i++) {
             int numberOfUsersThatRatedMovieI = 0;
@@ -118,7 +142,7 @@ public class Util {
                 }
             }
             // Add average only if sufficient users have rated that movie
-            if (numberOfUsersThatRatedMovieI > threshold) {
+            if (numberOfUsersThatRatedMovieI > 0) {
                 avgUserRatings.add(1.0 * ratingSumForMovieI / numberOfUsersThatRatedMovieI);
             } else {
                 avgUserRatings.add(0.0);
@@ -126,7 +150,11 @@ public class Util {
         }
         return avgUserRatings;
     }
-
+    /**
+     * @param trainingData Training Data matrix
+     * @return A list of average ratings. The item at i-th index of the list represents the average
+     * rating that the user with ID (i + 1) has given to all the movies that he has rated.
+     */
     public static List<Double> getEachUsersAvgRating(List<List<Double>> trainingData) {
         List<Double> avgList =
                 trainingData.stream()
@@ -151,11 +179,8 @@ public class Util {
         return (double) a / (a + b + c);
     }
 
-    public static List<Double> getJaccardSimilaritiesWithUser(List<List<Double>> trainingData, Map<Integer, Double> userRatingMap) {
-        List<Double> list = new ArrayList<>();
-        for(List<Double> trainingUserRatings : trainingData) {
-            list.add(jaccardSimilarity(trainingUserRatings, userRatingMap.keySet()));
-        }
-        return list;
+    public static void deleteFileAtPath(String filePath) {
+        File file = new File(filePath);
+        if(file.exists()) file.delete();
     }
 }
