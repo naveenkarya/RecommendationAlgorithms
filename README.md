@@ -1,6 +1,6 @@
 # RecommendationAlgorithms
 
-This project implements Collaborative filtering algorithms with a few variations. In addition to those, I have also implemented few other algorithms like Slope-One and Euclidean Distance.
+This project implements Collaborative filtering algorithms with a few variations. In addition to those, I have also implemented few other algorithms like Slope-One and Ensemble (Simple Average).
 The purpose of this project is not to compare the efficiency of these algorithms. It only compares the effectiveness of these algorithms based on **MAE (Mean Absolute Error)**.
 
 ### How to Run the program:
