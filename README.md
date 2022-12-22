@@ -22,7 +22,7 @@ F. Maxwell Harper and Joseph A. Konstan. 2015. The MovieLens Datasets: History a
 
 
 ### Results
-<img src="https://github.com/naveenkarya/RecommendationAlgorithms/blob/main/images/Final_Results.png"  width="60%" height="30%">
+<img src="https://github.com/naveenkarya/RecommendationAlgorithms/blob/main/images/Final_Results.png"  width="70%" height="40%">
 
 ### Report
 [Final Report](https://github.com/naveenkarya/RecommendationAlgorithms/blob/main/Report.pdf)
